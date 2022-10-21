@@ -6,6 +6,7 @@ import sahachan.prac.ttoproj.patient.entity.Patient;
 import sahachan.prac.ttoproj.security.entity.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,9 +25,11 @@ public class Doctor {
     @OneToOne(mappedBy = "doctor",cascade = CascadeType.ALL)
     User user;
 
+    @Builder.Default
     @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL)
-    List<Patient> patients;
+    List<Patient> patients = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "by",cascade = CascadeType.ALL)
-    List<Comment> comments;
+    List<Comment> comments = new ArrayList<>();
 }
