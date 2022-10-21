@@ -60,6 +60,11 @@ public class User {
     @NotNull
     private Date lastPasswordResetDate;
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    private String homeTown;
+
 	@Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Authority> authorities = new ArrayList<>();
