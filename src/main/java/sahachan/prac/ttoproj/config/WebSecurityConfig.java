@@ -4,7 +4,6 @@ package sahachan.prac.ttoproj.config;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,21 +27,18 @@ import sahachan.prac.ttoproj.security.controller.JwtAuthenticationTokenFilter;
 @RequiredArgsConstructor
 @Slf4j
 public class WebSecurityConfig {
+    final JwtAuthenticationEntryPoint unauthorizedHandler;
+    final JwtAuthenticationTokenFilter tokenFilter;
 
-    @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
-    
-    @Autowired
-    private final JwtAuthenticationTokenFilter tokenFilter;
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http
+                .cors().and()
+                .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .authorizeRequests()
-                .antMatchers("/auth/**",  "/refresh").permitAll()
-                .antMatchers(HttpMethod.GET,"/event").permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/event").hasRole("ADMIN")
+                .antMatchers("/auth/**","/register").permitAll()
+                .antMatchers(HttpMethod.GET,"/credential","/refresh").hasAnyRole("USER","PATIENT","DOCTOR","ADMIN")
                 .anyRequest()
                 .authenticated();
         http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);

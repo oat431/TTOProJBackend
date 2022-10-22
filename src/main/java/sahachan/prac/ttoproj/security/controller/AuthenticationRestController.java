@@ -1,7 +1,7 @@
 package sahachan.prac.ttoproj.security.controller;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 
@@ -12,38 +12,31 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sahachan.prac.ttoproj.security.entity.JwtUser;
-import sahachan.prac.ttoproj.security.repository.UserRepository;
+import sahachan.prac.ttoproj.security.entity.User;
+import sahachan.prac.ttoproj.security.service.UserService;
 import sahachan.prac.ttoproj.util.JwtTokenUtil;
+import sahachan.prac.ttoproj.util.ProjectMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
-@CrossOrigin
+@Controller
+@RequiredArgsConstructor
 public class AuthenticationRestController {
 
     @Value("${jwt.header}")
-    private String tokenHeader;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    UserRepository userRepository;
+    String tokenHeader;
+    final AuthenticationManager authenticationManager;
+    final JwtTokenUtil jwtTokenUtil;
+    final UserDetailsService userDetailsService;
+    final UserService userService;
 
     @PostMapping("${jwt.route.authentication.path}")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
-
-        // Perform the security
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getUsername(),
@@ -52,9 +45,9 @@ public class AuthenticationRestController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Reload password post-security so we can generate token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        User user = userService.findByUsername(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(userDetails, user.getAuthorities(),user.getId());
         Map result = new HashMap();
         result.put("token", token);
         return ResponseEntity.ok(result);
@@ -75,5 +68,17 @@ public class AuthenticationRestController {
         }
     }
 
+    @GetMapping(value = "credential")
+    public ResponseEntity<?> getCredential(HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+        return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(user));
+    }
 
+    @PostMapping(value = "register")
+    public ResponseEntity<?> register(@RequestBody User registered) {
+        User user = userService.addUser(registered);
+        return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(user));
+    }
 }

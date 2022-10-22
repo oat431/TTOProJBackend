@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import sahachan.prac.ttoproj.security.entity.Authority;
 import sahachan.prac.ttoproj.security.entity.JwtUser;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -16,12 +17,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenUtil implements Serializable {
 
-    static final String CLAIM_KEY_USERNAME = "sub";
+    static final String CLAIM_KEY_USERNAME = "username";
+    static final String CLAIM_KEY_ID = "id";
+    static final String CLAIM_KEY_ROLE = "role";
     static final String CLAIM_KEY_AUDIENCE = "audience";
     static final String CLAIM_KEY_CREATED = "created";
     private static final long serialVersionUID = -3301605591108950415L;
@@ -76,11 +81,6 @@ public class JwtTokenUtil implements Serializable {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-
-//            claims = Jwts.parser()
-//                    .setSigningKey(secret)
-//                    .parseClaimsJws(token)
-//                    .getBody();
         } catch (Exception e) {
             claims = null;
         }
@@ -101,9 +101,11 @@ public class JwtTokenUtil implements Serializable {
     }
 
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, List<Authority> authority, Long id) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        claims.put(CLAIM_KEY_ID, id);
+        claims.put(CLAIM_KEY_ROLE, authority.stream().map(auth -> auth.getName().name()).collect(Collectors.toList()));
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }
