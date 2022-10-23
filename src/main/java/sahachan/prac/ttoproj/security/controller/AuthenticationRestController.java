@@ -54,7 +54,7 @@ public class AuthenticationRestController {
     }
 
 
-    @GetMapping(value = "${jwt.route.authentication.refresh}")
+    @GetMapping("${jwt.route.authentication.refresh}")
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
@@ -68,7 +68,7 @@ public class AuthenticationRestController {
         }
     }
 
-    @GetMapping(value = "credential")
+    @GetMapping("credential")
     public ResponseEntity<?> getCredential(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String username = jwtTokenUtil.getUsernameFromToken(token);
@@ -76,7 +76,7 @@ public class AuthenticationRestController {
         return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(user));
     }
 
-    @PostMapping(value = "register")
+    @PostMapping("register")
     public ResponseEntity<?> register(@RequestBody User registered) {
         User user = userService.addUser(registered);
         return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(user));

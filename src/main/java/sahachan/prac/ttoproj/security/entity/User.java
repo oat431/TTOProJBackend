@@ -65,6 +65,8 @@ public class User {
 
     private String homeTown;
 
+    private Date birthDate;
+
 	@Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Authority> authorities = new ArrayList<>();

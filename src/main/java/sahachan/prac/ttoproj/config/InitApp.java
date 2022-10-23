@@ -124,7 +124,8 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                             .email("patient" + i + "@patient.com")
                             .gender(i%2==0? Gender.MALE: Gender.FEMALE)
                             .homeTown("Patient town" + i)
-                            .lastPasswordResetDate(Date.from(LocalDate.of(2021, 01, 01).atStartOfDay(ZoneId.systemDefault()).toInstant()))
+                            .lastPasswordResetDate(Date.from(LocalDate.of(2021, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()))
+                            .birthDate(Timestamp.valueOf(LocalDateTime.of(2000, 1, 1, 0, 0)))
                             .enabled(true)
                             .build();
             users[i].getAuthorities().add(patient);
@@ -154,6 +155,7 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                     .gender(i%2==0? Gender.MALE: Gender.FEMALE)
                     .homeTown("Doctor town" + i)
                     .email("doctor" + i + "@doctor.com")
+                    .birthDate(Timestamp.valueOf(LocalDateTime.of(2000, 1, 1, 0, 0)))
                     .enabled(true)
                     .lastPasswordResetDate(Date.from(LocalDate.of(2021, 01, 01).atStartOfDay(ZoneId.systemDefault()).toInstant()))
                     .build();
@@ -209,6 +211,7 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                 .email("admin@admin.com")
                 .gender(Gender.NON_BI)
                 .homeTown("Admin town")
+                .birthDate(Timestamp.valueOf(LocalDateTime.of(2000, 1, 1, 0, 0)))
                 .lastPasswordResetDate(Date.from(LocalDate.of(2021, 01, 01).atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .enabled(true)
                 .build();
@@ -232,6 +235,7 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                 .gender(Gender.OTHER)
                 .homeTown("user town")
                 .lastPasswordResetDate(Date.from(LocalDate.of(2021, 01, 01).atStartOfDay(ZoneId.systemDefault()).toInstant()))
+                .birthDate(Timestamp.valueOf(LocalDateTime.of(2000, 1, 1, 0, 0)))
                 .enabled(false)
                 .build();
         users[9].getAuthorities().add(normalUser);

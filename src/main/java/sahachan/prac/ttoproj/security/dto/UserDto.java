@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sahachan.prac.ttoproj.security.entity.Authority;
 
 import java.util.List;
 
@@ -20,5 +19,6 @@ public class UserDto {
     String gender;
     String homeTown;
     String email;
+    String birthDate;
     List<String> authorities;
 }

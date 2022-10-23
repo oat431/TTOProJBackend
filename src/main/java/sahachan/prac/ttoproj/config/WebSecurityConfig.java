@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,20 +34,28 @@ public class WebSecurityConfig {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors().and()
                 .csrf().disable()
+                .cors().and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/auth/**","/register").permitAll()
-                .antMatchers(HttpMethod.GET,"/credential","/refresh").hasAnyRole("USER","PATIENT","DOCTOR","ADMIN")
+//                .antMatchers(HttpMethod.GET,"/credential","/refresh").hasAnyRole("USER","PATIENT","DOCTOR","ADMIN")
+                .antMatchers(HttpMethod.GET,"/credential","/refresh").permitAll()
+//                .antMatchers(HttpMethod.POST,"/admin/verify/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/admin/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/admin/**").permitAll()
                 .anyRequest()
                 .authenticated();
-        http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
-        log.info("security filter chain set");
+        http
+                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+
+        http.headers().frameOptions().disable();
+        // disable page caching
+        http.headers().cacheControl();
+        log.info("SecurityFilterChain created");
         return http.build();
     }
-
-
 
 //    @Bean
 //    ServerHttpSecurity serverHttpSecurity() {
@@ -67,8 +76,6 @@ public class WebSecurityConfig {
     public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
         return new JwtAuthenticationTokenFilter();
     }
-
-
 
     @Bean
     public WebSecurityCustomizer configure() {
