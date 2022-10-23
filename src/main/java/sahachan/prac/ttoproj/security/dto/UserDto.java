@@ -20,5 +20,6 @@ public class UserDto {
     String gender;
     String homeTown;
     String email;
+    String birthday;
     List<String> authorities;
 }
