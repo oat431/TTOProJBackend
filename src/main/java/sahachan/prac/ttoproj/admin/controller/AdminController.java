@@ -5,7 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sahachan.prac.ttoproj.admin.service.AdminService;
+import sahachan.prac.ttoproj.patient.entity.VaccineHistoryRequest;
 import sahachan.prac.ttoproj.util.ProjectMapper;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -38,6 +41,16 @@ public class AdminController {
     public ResponseEntity<?> getUsers() {
         return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(adminService.getAllUser()));
     }
+
+    @PostMapping("/assign-doctor")
+    public ResponseEntity<?> assignDoctor(@RequestBody AssignDoctorRequest request) {
+        return ResponseEntity.ok(ProjectMapper.INSTANCE.getPatientDto(adminService.addDoctorToPatient(request.getPatientID(), request.getDoctorID())));
+    }
+
+    @PostMapping("/add-vaccine-history")
+    public ResponseEntity<?> addVaccineHistory(@RequestBody AddVaccineHistoryRequest request) {
+        return ResponseEntity.ok(ProjectMapper.INSTANCE.getPatientDto(adminService.addVaccineHistory(request.getPatientID(), request.getHistory())));
+    }
 }
 
 @Data
@@ -46,4 +59,22 @@ public class AdminController {
 @NoArgsConstructor
 class Hospital {
     String hospital;
+}
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+class AssignDoctorRequest {
+    Long patientID;
+    Long doctorID;
+}
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+class AddVaccineHistoryRequest {
+    Long patientID;
+    List<VaccineHistoryRequest> history;
 }

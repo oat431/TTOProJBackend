@@ -21,9 +21,15 @@ public class PatientDaoImpl implements PatientDao{
     }
 
     @Override
+    public Patient updatePatient(Patient patient) {
+        return patientRepository.save(patient);
+    }
+
+    @Override
     public Patient addPatient(Patient patient) {
         return patientRepository.save(patient);
     }
+
 
     @Override
     public List<Patient> getAllPatient() {

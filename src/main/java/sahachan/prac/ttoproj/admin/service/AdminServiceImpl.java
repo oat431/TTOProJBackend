@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 import sahachan.prac.ttoproj.doctor.dao.DoctorDao;
 import sahachan.prac.ttoproj.doctor.entity.Doctor;
 import sahachan.prac.ttoproj.patient.dao.PatientDao;
+import sahachan.prac.ttoproj.patient.dao.VaccineHistoryDao;
 import sahachan.prac.ttoproj.patient.entity.Patient;
+import sahachan.prac.ttoproj.patient.entity.VaccineHistory;
+import sahachan.prac.ttoproj.patient.entity.VaccineHistoryRequest;
 import sahachan.prac.ttoproj.security.dao.AuthorityDao;
 import sahachan.prac.ttoproj.security.dao.UserDao;
 import sahachan.prac.ttoproj.security.entity.Authority;
 import sahachan.prac.ttoproj.security.entity.AuthorityName;
 import sahachan.prac.ttoproj.security.entity.User;
+import sahachan.prac.ttoproj.vaccine.dao.VaccineDao;
+import sahachan.prac.ttoproj.vaccine.entity.Vaccine;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +29,8 @@ public class AdminServiceImpl implements AdminService{
     final PatientDao patientDao;
     final DoctorDao doctorDao;
     final AuthorityDao authorityDao;
+    final VaccineHistoryDao vaccineHistoryDao;
+    final VaccineDao vaccineDao;
 
     private User getUserDetail(Long id) {
         return userDao.getUser(id);
@@ -35,8 +41,7 @@ public class AdminServiceImpl implements AdminService{
         Authority rolePatient = Authority.builder().name(AuthorityName.ROLE_PATIENT).build();
         authorityDao.addAuthority(rolePatient);
         User user = getUserDetail(id);
-        Patient patient = new Patient();
-        patientDao.addPatient(patient);
+        Patient patient = patientDao.addPatient(new Patient());
         user.setAuthorities(new ArrayList<>());
         user.getAuthorities().add(rolePatient);
         user.setEnabled(true);
@@ -62,6 +67,41 @@ public class AdminServiceImpl implements AdminService{
         return doctor;
     }
 
+    private Vaccine checkVaccine(String codeName,String fullName) {
+        Vaccine vaccine = vaccineDao.getVaccine(codeName);
+        if(vaccine == null) {
+            vaccine = Vaccine.builder()
+                    .codeName(codeName)
+                    .fullName(fullName)
+                    .build();
+            vaccineDao.addVaccine(vaccine);
+        }
+        return vaccine;
+    }
+
+    @Override
+    public Patient addVaccineHistory(Long id, List<VaccineHistoryRequest> history) {
+        Patient patient = patientDao.getPatient(id);
+        for (VaccineHistoryRequest vaccineHistory : history) {
+            Vaccine vaccine = checkVaccine(vaccineHistory.getCodeName(),vaccineHistory.getFullName());
+            VaccineHistory temp = VaccineHistory.builder()
+                    .vaccine(vaccine)
+                    .vaccineDate(vaccineHistory.getVaccineDate())
+                    .build();
+            temp.setPatient(patient);
+            vaccineHistoryDao.addVaccineHistory(temp);
+        }
+        return patient;
+    }
+
+    @Override
+    public Patient addDoctorToPatient(Long patientId, Long doctorId) {
+        Patient patient = patientDao.getPatient(patientId);
+        Doctor doctor = doctorDao.getDoctor(doctorId);
+        patient.setDoctor(doctor);
+        return patientDao.updatePatient(patient);
+    }
+
     @Override
     public List<User> getAllUser() {
         return userDao.getAllUser();
@@ -84,12 +124,12 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public List<Doctor> getAllDoctor() {
-        return null;
+        return doctorDao.getAllDoctor();
     }
 
     @Override
     public Page<Doctor> getAllDoctor(PageRequest pageRequest) {
-        return null;
+        return doctorDao.getAllDoctor(pageRequest);
     }
 
     @Override
