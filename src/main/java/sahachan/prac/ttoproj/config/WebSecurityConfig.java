@@ -47,6 +47,7 @@ public class WebSecurityConfig {
                 .antMatchers(HttpMethod.GET,"/admin/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/doctor/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/doctor/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/patient/**").permitAll()
                 .anyRequest()
                 .authenticated();
         http
