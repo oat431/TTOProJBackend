@@ -5,7 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sahachan.prac.ttoproj.admin.service.AdminService;
+import sahachan.prac.ttoproj.doctor.service.DoctorService;
 import sahachan.prac.ttoproj.patient.entity.VaccineHistoryRequest;
+import sahachan.prac.ttoproj.patient.service.PatientService;
+import sahachan.prac.ttoproj.security.entity.User;
+import sahachan.prac.ttoproj.security.service.UserService;
 import sahachan.prac.ttoproj.util.ProjectMapper;
 
 import java.util.List;
@@ -15,6 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminController {
     final AdminService adminService;
+    final UserService userService;
+    final DoctorService doctorService;
+    final PatientService patientService;
 
 
     @PostMapping("/verify/patient/{id}")
@@ -40,6 +47,21 @@ public class AdminController {
     @GetMapping("/users")
     public ResponseEntity<?> getUsers() {
         return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(adminService.getAllUser()));
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
+        User user = userService.getUser(id);
+        if(user.getAdmin() != null) {
+            return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(adminService.getUser(id)));
+        }
+        if(user.getDoctor() != null) {
+            return ResponseEntity.ok(ProjectMapper.INSTANCE.getDoctorDto(doctorService.getDoctor(user.getDoctor().getId())));
+        }
+        if(user.getPatient() != null) {
+            return ResponseEntity.ok(ProjectMapper.INSTANCE.getPatientDto(patientService.getPatient(user.getPatient().getId())));
+        }
+        return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(adminService.getUser(id)));
     }
 
     @PostMapping("/assign-doctor")

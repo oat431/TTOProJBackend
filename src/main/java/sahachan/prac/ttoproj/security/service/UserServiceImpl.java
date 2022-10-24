@@ -44,4 +44,9 @@ public class UserServiceImpl implements UserService{
         newUser.getAuthorities().add(userRole);
         return userDao.addUser(newUser);
     }
+
+    @Override
+    public User getUser(Long id) {
+        return userDao.getUser(id);
+    }
 }
