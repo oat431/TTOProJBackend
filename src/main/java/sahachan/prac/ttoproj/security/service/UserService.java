@@ -6,4 +6,6 @@ import sahachan.prac.ttoproj.security.entity.User;
 public interface UserService {
     User findByUsername(String username);
     User addUser(User user);
+
+    User getUser(Long id);
 }

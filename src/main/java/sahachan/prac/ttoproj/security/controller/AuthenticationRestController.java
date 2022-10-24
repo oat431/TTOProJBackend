@@ -2,6 +2,7 @@ package sahachan.prac.ttoproj.security.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 
@@ -26,6 +27,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationRestController {
 
     @Value("${jwt.header}")
@@ -61,6 +63,8 @@ public class AuthenticationRestController {
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
 
         if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
+            log.info("token: {}",token);
+            log.info("last password: {}", user.getLastPasswordResetDate());
             String refreshedToken = jwtTokenUtil.refreshToken(token);
             return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
         } else {
@@ -70,9 +74,14 @@ public class AuthenticationRestController {
 
     @GetMapping("credential")
     public ResponseEntity<?> getCredential(HttpServletRequest request) {
+        log.info("called credential");
         String token = request.getHeader(tokenHeader);
+        log.info("token: " + token);
         String username = jwtTokenUtil.getUsernameFromToken(token);
+        log.info("username: " + username);
         User user = userService.findByUsername(username);
+        log.info("user: " + user.getId());
+        log.info("end credential");
         return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(user));
     }
 

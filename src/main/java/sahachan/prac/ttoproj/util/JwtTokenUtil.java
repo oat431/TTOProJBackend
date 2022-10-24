@@ -4,6 +4,7 @@ package sahachan.prac.ttoproj.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -13,8 +14,6 @@ import sahachan.prac.ttoproj.security.entity.JwtUser;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.Serializable;
 import java.security.Key;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,9 +21,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class JwtTokenUtil implements Serializable {
 
-    static final String CLAIM_KEY_USERNAME = "username";
+    static final String CLAIM_KEY_USERNAME = "sub";
     static final String CLAIM_KEY_ID = "id";
     static final String CLAIM_KEY_ROLE = "role";
     static final String CLAIM_KEY_AUDIENCE = "audience";
@@ -54,7 +54,7 @@ public class JwtTokenUtil implements Serializable {
             final Claims claims = getClaimsFromToken(token);
             created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
         } catch (Exception e) {
-            created = null;
+            created = new Date();
         }
         return created;
     }

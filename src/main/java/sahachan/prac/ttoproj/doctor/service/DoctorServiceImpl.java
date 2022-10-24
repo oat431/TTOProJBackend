@@ -49,4 +49,9 @@ public class DoctorServiceImpl implements DoctorService {
         commentDao.addComment(com);
         return patient;
     }
+
+    @Override
+    public Doctor getDoctor(Long id) {
+        return doctorDao.getDoctor(id);
+    }
 }
