@@ -3,7 +3,6 @@ package sahachan.prac.ttoproj.util;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
 import sahachan.prac.ttoproj.doctor.dto.DoctorDto;
 import sahachan.prac.ttoproj.doctor.entity.Doctor;
 import sahachan.prac.ttoproj.patient.dto.PatientDto;
