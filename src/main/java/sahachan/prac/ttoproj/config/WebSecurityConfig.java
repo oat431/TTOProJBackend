@@ -45,6 +45,8 @@ public class WebSecurityConfig {
 //                .antMatchers(HttpMethod.POST,"/admin/verify/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/admin/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/admin/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/doctor/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/doctor/**").permitAll()
                 .anyRequest()
                 .authenticated();
         http
