@@ -136,4 +136,9 @@ public class AdminServiceImpl implements AdminService{
     public User getUser(Long id) {
         return userDao.getUser(id);
     }
+
+    @Override
+    public List<Vaccine> getAllVaccine() {
+        return vaccineDao.getAllVaccines();
+    }
 }

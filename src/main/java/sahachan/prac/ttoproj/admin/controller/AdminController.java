@@ -1,11 +1,17 @@
 package sahachan.prac.ttoproj.admin.controller;
 
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sahachan.prac.ttoproj.admin.service.AdminService;
+import sahachan.prac.ttoproj.doctor.entity.Doctor;
 import sahachan.prac.ttoproj.doctor.service.DoctorService;
+import sahachan.prac.ttoproj.patient.entity.Patient;
 import sahachan.prac.ttoproj.patient.entity.VaccineHistoryRequest;
 import sahachan.prac.ttoproj.patient.service.PatientService;
 import sahachan.prac.ttoproj.security.entity.User;
@@ -35,18 +41,51 @@ public class AdminController {
     }
 
     @GetMapping("/patients")
-    public ResponseEntity<?> getPatients() {
-        return ResponseEntity.ok(ProjectMapper.INSTANCE.getPatientDto(adminService.getAllPatient()));
+    public ResponseEntity<?> getPatients(
+            @RequestParam(value = "_limit", required = false) Integer perPage,
+            @RequestParam(value = "_page", required = false) Integer page
+    ) {
+        PageRequest pageRequest = PageRequest.of(page - 1, perPage);
+        Page<Patient> patients = adminService.getAllPatient(pageRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("x-total-count", String.valueOf(patients.getTotalElements()));
+        return new ResponseEntity<>(
+                ProjectMapper.INSTANCE.getPatientDto(patients.getContent()),
+                headers,
+                HttpStatus.OK
+        );
     }
 
     @GetMapping("/doctors")
-    public ResponseEntity<?> getDoctors() {
-        return ResponseEntity.ok(ProjectMapper.INSTANCE.getDoctorDto(adminService.getAllDoctor()));
+    public ResponseEntity<?> getDoctors(
+            @RequestParam(value = "_limit", required = false) Integer perPage,
+            @RequestParam(value = "_page", required = false) Integer page
+    ) {
+        PageRequest pageRequest = PageRequest.of(page - 1, perPage);
+        Page<Doctor> doctors = adminService.getAllDoctor(pageRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("x-total-count", String.valueOf(doctors.getTotalElements()));
+        return new ResponseEntity<>(
+                ProjectMapper.INSTANCE.getDoctorDto(doctors.getContent()),
+                headers,
+                HttpStatus.OK
+        );
     }
 
     @GetMapping("/users")
-    public ResponseEntity<?> getUsers() {
-        return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(adminService.getAllUser()));
+    public ResponseEntity<?> getUsers(
+            @RequestParam(value = "_limit", required = false) Integer perPage,
+            @RequestParam(value = "_page", required = false) Integer page
+    ) {
+        PageRequest pageRequest = PageRequest.of(page - 1, perPage);
+        Page<User> user = adminService.getAllUser(pageRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("x-total-count", String.valueOf(user.getTotalElements()));
+        return new ResponseEntity<>(
+                ProjectMapper.INSTANCE.getUserDto(user.getContent()),
+                headers,
+                HttpStatus.OK
+        );
     }
 
     @GetMapping("/users/{id}")
@@ -62,6 +101,11 @@ public class AdminController {
             return ResponseEntity.ok(ProjectMapper.INSTANCE.getPatientDto(patientService.getPatient(user.getPatient().getId())));
         }
         return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(adminService.getUser(id)));
+    }
+
+    @GetMapping("/vaccines")
+    public ResponseEntity<?> getVaccineHistoryRequests() {
+        return ResponseEntity.ok(ProjectMapper.INSTANCE.getVaccineDto(adminService.getAllVaccine()));
     }
 
     @PostMapping("/assign-doctor")

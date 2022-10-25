@@ -23,7 +23,8 @@ public class TtoprojApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry){
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3300");
+                        .allowedOrigins("http://localhost:3300")
+                        .exposedHeaders("x-total-count");
             }
         };
     }
