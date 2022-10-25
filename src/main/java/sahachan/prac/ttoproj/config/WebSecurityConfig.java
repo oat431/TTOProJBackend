@@ -39,7 +39,7 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/auth/**","/register").permitAll()
+                .antMatchers("/auth/**","/register","/uploadFile").permitAll()
                 .antMatchers(HttpMethod.GET,"/credential","/refresh").hasAnyRole("PATIENT","DOCTOR","ADMIN")
                 .antMatchers(HttpMethod.POST,"/admin/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/admin/**").hasRole("ADMIN")
