@@ -1,12 +1,12 @@
 spring:
   profiles:
     active:
-      - development
+      - production
   datasource:
-    url: jdbc:mysql://localhost:3306/ttoproj?createDatabaseIfNotExist=true&autoReconnect=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 1590
+    url: jdbc:postgresql://db.icivegiybcedgshmfznr.supabase.co:5432/postgres?createDatabaseIfNotExist=true&autoReconnect=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    username: postgres
+    password: 6462@Saha--
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: create
