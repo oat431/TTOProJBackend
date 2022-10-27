@@ -16,4 +16,7 @@ public interface UserDao {
     List<User> getAllUser();
 
     Page<User> getAllUser(PageRequest pageRequest);
+
+    List<User> getUnEnabledUser();
+    Page<User> getUnEnabledUser(PageRequest pageRequest);
 }

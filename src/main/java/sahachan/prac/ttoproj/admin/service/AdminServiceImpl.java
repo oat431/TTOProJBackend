@@ -113,6 +113,16 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public List<User> getUnEnabledUser() {
+        return userDao.getUnEnabledUser();
+    }
+
+    @Override
+    public Page<User> getUnEnabledUser(PageRequest pageRequest) {
+        return userDao.getUnEnabledUser(pageRequest);
+    }
+
+    @Override
     public List<Patient> getAllPatient() {
         return patientDao.getAllPatient();
     }
