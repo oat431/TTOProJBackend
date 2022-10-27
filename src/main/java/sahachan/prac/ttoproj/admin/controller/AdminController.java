@@ -117,6 +117,22 @@ public class AdminController {
     public ResponseEntity<?> addVaccineHistory(@RequestBody AddVaccineHistoryRequest request) {
         return ResponseEntity.ok(ProjectMapper.INSTANCE.getPatientDto(adminService.addVaccineHistory(request.getPatientID(), request.getHistory())));
     }
+
+    @GetMapping("/users/unverified")
+    public ResponseEntity<?> getUnverifiedUsers(
+            @RequestParam(value = "_limit", required = false) Integer perPage,
+            @RequestParam(value = "_page", required = false) Integer page
+    ) {
+        PageRequest pageRequest = PageRequest.of(page - 1, perPage);
+        Page<User> user = adminService.getUnEnabledUser(pageRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("x-total-count", String.valueOf(user.getTotalElements()));
+        return new ResponseEntity<>(
+                ProjectMapper.INSTANCE.getUserDto(user.getContent()),
+                headers,
+                HttpStatus.OK
+        );
+    }
 }
 
 @Data

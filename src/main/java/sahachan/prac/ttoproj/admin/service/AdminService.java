@@ -17,11 +17,12 @@ public interface AdminService {
     Patient addDoctorToPatient(Long patientID, Long doctorID);
     List<User> getAllUser();
     Page<User> getAllUser(PageRequest pageRequest);
+    List<User> getUnEnabledUser();
+    Page<User> getUnEnabledUser(PageRequest pageRequest);
     List<Patient> getAllPatient();
     Page<Patient> getAllPatient(PageRequest pageRequest);
     List<Doctor> getAllDoctor();
     Page<Doctor> getAllDoctor(PageRequest pageRequest);
     User getUser(Long id);
-
     List<Vaccine> getAllVaccine();
 }

@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService{
                 .lastname(user.getLastname())
                 .email(user.getEmail())
                 .homeTown(user.getHomeTown())
+                .imageUrls(user.getImageUrls())
                 .enabled(false)
                 .gender(user.getGender())
                 .birthDate(user.getBirthDate())
