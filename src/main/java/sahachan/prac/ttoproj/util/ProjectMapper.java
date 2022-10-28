@@ -28,7 +28,8 @@ public interface ProjectMapper {
     List<PatientDto> getPatientDto(List<Patient> patient);
     @Mappings({
             @Mapping(target = "fullName", expression = "java(doctor.getUser().getFirstname() + \" \" + doctor.getUser().getLastname())"),
-            @Mapping(target = "imageUrls", expression = "java(doctor.getUser().getImageUrls())")
+            @Mapping(target = "imageUrls", expression = "java(doctor.getUser().getImageUrls())"),
+            @Mapping(target = "UserId", expression = "java(doctor.getUser().getId())")
     })
     DoctorDto getDoctorDto(Doctor doctor);
     List<DoctorDto> getDoctorDto(List<Doctor> doctor);

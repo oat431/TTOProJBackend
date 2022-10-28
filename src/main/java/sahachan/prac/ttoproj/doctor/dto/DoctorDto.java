@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DoctorDto {
     Long id;
+    Long UserId;
     String fullName;
     String hospital;
     String imageUrls;
