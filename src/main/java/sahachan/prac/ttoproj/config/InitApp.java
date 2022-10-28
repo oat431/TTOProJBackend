@@ -52,6 +52,20 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
     Patient[] patients = new Patient[6];
     Doctor[] doctors = new Doctor[2];
     Admin admin;
+
+    String[] imageUrls = {
+            "https://image.freepik.com/free-photo/korean-young-woman-s-half-length-portrait-female-model-white-shirt-showing-pointing-something-concept-human-emotions-facial-expression-front-view_155003-18248.jpg",
+            "https://image.freepik.com/free-photo/shocked-bearded-man-recieves-unexpected-news-from-friend-clasps-hands-near-face-opens-mouth-widely-expresses-surprisement-isolated-white-wall_273609-16646.jpg",
+            "https://image.freepik.com/free-photo/shocked-bearded-man-recieves-unexpected-news-from-friend-clasps-hands-near-face-opens-mouth-widely-expresses-surprisement-isolated-white-wall_273609-16646.jpg",
+            "https://image.freepik.com/free-photo/happy-arab-woman-hijab-portrait-smiling-girl-pointing-camera-red-studio-background-young-emotional-woman-human-emotions-facial-expression-concept_155003-21757.jpg",
+            "https://image.freepik.com/free-photo/korean-young-woman-s-half-length-portrait-female-model-white-shirt-showing-pointing-something-concept-human-emotions-facial-expression-front-view_155003-18248.jpg",
+            "https://image.freepik.com/free-photo/shocked-bearded-man-recieves-unexpected-news-from-friend-clasps-hands-near-face-opens-mouth-widely-expresses-surprisement-isolated-white-wall_273609-16646.jpg",
+            "https://images.unsplash.com/photo-1586770802838-e524ec9018a8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80",
+            "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
+            "https://images.unsplash.com/photo-1601583789200-96cd7f385315?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=334&q=80",
+            "https://image.freepik.com/free-photo/korean-young-woman-s-half-length-portrait-female-model-white-shirt-showing-pointing-something-concept-human-emotions-facial-expression-front-view_155003-18248.jpg",
+    };
+
     PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Override
@@ -126,6 +140,7 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                             .homeTown("Patient town" + i)
                             .lastPasswordResetDate(Date.from(LocalDate.of(2021, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()))
                             .birthDate(Timestamp.valueOf(LocalDateTime.of(2000, 1, 1, 0, 0)))
+                            .imageUrls(imageUrls[i])
                             .enabled(true)
                             .build();
             users[i].getAuthorities().add(patient);
@@ -155,6 +170,7 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                     .gender(i%2==0? Gender.MALE: Gender.FEMALE)
                     .homeTown("Doctor town" + i)
                     .email("doctor" + i + "@doctor.com")
+                    .imageUrls(imageUrls[i + 6])
                     .birthDate(Timestamp.valueOf(LocalDateTime.of(2000, 1, 1, 0, 0)))
                     .enabled(true)
                     .lastPasswordResetDate(Date.from(LocalDate.of(2021, 01, 01).atStartOfDay(ZoneId.systemDefault()).toInstant()))
@@ -213,6 +229,7 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                 .homeTown("Admin town")
                 .birthDate(Timestamp.valueOf(LocalDateTime.of(2000, 1, 1, 0, 0)))
                 .lastPasswordResetDate(Date.from(LocalDate.of(2021, 01, 01).atStartOfDay(ZoneId.systemDefault()).toInstant()))
+                .imageUrls(imageUrls[8])
                 .enabled(true)
                 .build();
         users[8].getAuthorities().add(adminRole);
@@ -236,6 +253,7 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                 .homeTown("user town")
                 .lastPasswordResetDate(Date.from(LocalDate.of(2021, 01, 01).atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .birthDate(Timestamp.valueOf(LocalDateTime.of(2000, 1, 1, 0, 0)))
+                .imageUrls(imageUrls[9])
                 .enabled(false)
                 .build();
         users[9].getAuthorities().add(normalUser);
