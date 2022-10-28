@@ -43,4 +43,14 @@ public class UserDaoImpl implements UserDao {
     public Page<User> getAllUser(PageRequest pageRequest) {
         return userRepository.findAll(pageRequest);
     }
+
+    @Override
+    public List<User> getUnEnabledUser() {
+        return userRepository.findByEnabledFalse();
+    }
+
+    @Override
+    public Page<User> getUnEnabledUser(PageRequest pageRequest) {
+        return userRepository.findByEnabledFalse(pageRequest);
+    }
 }

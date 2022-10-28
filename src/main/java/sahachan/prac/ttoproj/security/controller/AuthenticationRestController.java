@@ -63,8 +63,6 @@ public class AuthenticationRestController {
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
 
         if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            log.info("token: {}",token);
-            log.info("last password: {}", user.getLastPasswordResetDate());
             String refreshedToken = jwtTokenUtil.refreshToken(token);
             return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
         } else {
@@ -74,14 +72,12 @@ public class AuthenticationRestController {
 
     @GetMapping("credential")
     public ResponseEntity<?> getCredential(HttpServletRequest request) {
-        log.info("called credential");
+        log.info("======called credential======");
         String token = request.getHeader(tokenHeader);
-        log.info("token: " + token);
         String username = jwtTokenUtil.getUsernameFromToken(token);
-        log.info("username: " + username);
         User user = userService.findByUsername(username);
         log.info("user: " + user.getId());
-        log.info("end credential");
+        log.info("======end credential=========");
         return ResponseEntity.ok(ProjectMapper.INSTANCE.getUserDto(user));
     }
 

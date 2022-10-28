@@ -37,8 +37,10 @@ public class UserServiceImpl implements UserService{
                 .lastname(user.getLastname())
                 .email(user.getEmail())
                 .homeTown(user.getHomeTown())
+                .imageUrls(user.getImageUrls())
                 .enabled(false)
                 .gender(user.getGender())
+                .birthDate(user.getBirthDate())
                 .lastPasswordResetDate(Date.from(LocalDate.of(2021, 01, 01).atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .build();
         newUser.getAuthorities().add(userRole);

@@ -68,6 +68,8 @@ public class User {
 
     private Date birthDate;
 
+    private String imageUrls;
+
 	@Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Authority> authorities = new ArrayList<>();
