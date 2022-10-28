@@ -13,4 +13,5 @@ public class DoctorDto {
     Long id;
     String fullName;
     String hospital;
+    String imageUrls;
 }
