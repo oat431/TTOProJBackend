@@ -2,6 +2,7 @@ package sahachan.prac.ttoproj.util;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import sahachan.prac.ttoproj.doctor.dto.DoctorDto;
@@ -25,7 +26,10 @@ public interface ProjectMapper {
     List<UserDto> getUserDto(List<User> user);
     PatientDto getPatientDto(Patient patient);
     List<PatientDto> getPatientDto(List<Patient> patient);
-    @Mapping(target = "fullName", expression = "java(doctor.getUser().getFirstname() + \" \" + doctor.getUser().getLastname())")
+    @Mappings({
+            @Mapping(target = "fullName", expression = "java(doctor.getUser().getFirstname() + \" \" + doctor.getUser().getLastname())"),
+            @Mapping(target = "imageUrls", expression = "java(doctor.getUser().getImageUrls())")
+    })
     DoctorDto getDoctorDto(Doctor doctor);
     List<DoctorDto> getDoctorDto(List<Doctor> doctor);
     VaccineDto getVaccineDto(Vaccine vaccine);
