@@ -23,7 +23,7 @@ public class TtoprojApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry){
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3300","http://127.0.0.1:3300")
+                        .allowedOrigins("http://localhost:3300","http://127.0.0.1:3300","https://ttoproj-frontend.herokuapp.com")
                         .exposedHeaders("x-total-count");
             }
         };
