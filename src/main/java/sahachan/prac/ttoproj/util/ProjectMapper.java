@@ -21,7 +21,12 @@ import java.util.stream.Collectors;
 public interface ProjectMapper {
     ProjectMapper INSTANCE = Mappers.getMapper(ProjectMapper.class);
 
-    @Mapping(target = "authorities", expression = "java(user.getAuthorities().stream().map(auth -> auth.getName().name()).collect(Collectors.toList()))")
+    @Mappings({
+            @Mapping(target = "authorities", expression = "java(user.getAuthorities().stream().map(auth -> auth.getName().name()).collect(Collectors.toList()))"),
+            @Mapping(target = "doctorID", expression = "java(user.getDoctor() == null ? null : user.getDoctor().getId())"),
+            @Mapping(target = "patientID", expression = "java(user.getPatient() == null ? null : user.getPatient().getId())"),
+            @Mapping(target = "adminID", expression = "java(user.getAdmin() == null ? null : user.getAdmin().getId())"),
+    })
     UserDto getUserDto(User user);
     List<UserDto> getUserDto(List<User> user);
     PatientDto getPatientDto(Patient patient);

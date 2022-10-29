@@ -13,6 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 public class UserDto {
     Long id;
+    Long doctorID;
+    Long patientID;
+    Long adminID;
     String username;
     String firstname;
     String lastname;
