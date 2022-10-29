@@ -52,4 +52,9 @@ public class DoctorController {
         return ResponseEntity.ok(ProjectMapper.INSTANCE.getPatientDto(doctorService.addComment(comment)));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDoctor(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(ProjectMapper.INSTANCE.getDoctorDto(doctorService.getDoctor(id)));
+    }
+
 }
